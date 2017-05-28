@@ -1,9 +1,11 @@
+cd
+
 sudo apt-get update
 sudo apt-get -y install apache2 libapache2-mod-wsgi python-pip
 sudo pip install flask
 
-mkdir ~/app
-sudo ln -sT ~/app /var/www/html/app
+mkdir ~/$1
+sudo ln -sT ~/app /var/www/html/$1
 
 echo "from flask import Flask
 app = Flask(__name__)
@@ -18,14 +20,14 @@ if __name__ == '__main__':
 " > main.html
 
 echo "import sys
-sys.path.insert(0, '/var/www/html/app')
+sys.path.insert(0, '/var/www/html/$1')
 
 from main import app as application
 " > flaskapp.wsgi
 
 echo "append the following:
 WSGIDaemonProcess flaskapp threads=5
-WSGIScriptAlias / /var/www/html/app/flaskapp.wsgi
+WSGIScriptAlias / /var/www/html/$1/flaskapp.wsgi
 
 <Directory flaskapp>
     WSGIProcessGroup flaskapp
