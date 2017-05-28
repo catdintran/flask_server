@@ -1,0 +1,41 @@
+sudo apt-get update
+sudo apt-get -y install apache2 libapache2-mod-wsgi python-pip
+sudo pip install flask
+
+mkdir ~/app
+sudo ln -sT ~/app /var/www/html/app
+
+echo "from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+  return 'Hello from Flask!'
+
+if __name__ == '__main__':
+  app.run()
+
+" > main.html
+
+echo "import sys
+sys.path.insert(0, '/var/www/html/app')
+
+from main import app as application
+" > flaskapp.wsgi
+
+echo "append the following:
+WSGIDaemonProcess flaskapp threads=5
+WSGIScriptAlias / /var/www/html/app/flaskapp.wsgi
+
+<Directory flaskapp>
+    WSGIProcessGroup flaskapp
+    WSGIApplicationGroup %{GLOBAL}
+    Order deny,allow
+    Allow from all
+</Directory>
+
+to /etc/apache2/sites-enabled/000-default.conf
+under DocumentRoot /var/www/html 
+"
+
+a="sudo apachectl restart"
