@@ -1,5 +1,8 @@
 cd
 
+git config --global user.name "catdintran"
+git config --global user.email "trancatdin86@yahoo.com"
+
 sudo apt-get update
 sudo apt-get -y install apache2 libapache2-mod-wsgi python-pip
 sudo pip install flask
@@ -25,6 +28,12 @@ sys.path.insert(0, '/var/www/html/$1')
 
 from main import app as application
 " > flaskapp.wsgi
+
+bash Miniconda2-latest-Linux-x86_64.sh
+
+cd
+export PATH=$PWD/miniconda2/bin:$PATH 
+
 
 echo "append the following:
 WSGIDaemonProcess flaskapp threads=5
